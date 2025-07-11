@@ -1,12 +1,10 @@
-Towers of Hanoi
+Towers of Hanoi.
 Windows Forms application.
 
-The classical case is 64 discs and 3 pegs.
-Configure the number of discs and pegs.
+Originally created in 2019, added to GitHub in 2025.
+Configure the number of discs and pegs (default 3).
 
 Let the computer calcuate and show the (optimal) move sequence.
 
-With four pegs or more the Frame-Stewart heuristic is being used.
-
-
+With 4 pegs or more the Frame-Stewart heuristic is being used.
 
