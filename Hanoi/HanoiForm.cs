@@ -11,6 +11,11 @@ using System.Windows.Forms;
 //add reference
 using System.Numerics;
 
+// Towers of Hanoi
+// Version: 0.1
+// Date   : 2019-02-10
+// Author : Arjan Bosse
+//
 //Generate a form and show an initial Hanoi situation.
 //Also show the number of moves required for the solution.
 //Allow the user to modify the number of pegs and discs.
@@ -18,7 +23,7 @@ using System.Numerics;
 //When started the actual situation is reset and solved; an enumerator on the solution moves is generated.
 //Also a timer is enabled; on each tick the next move of the soulution is drawn in the actual situation.
 //When stopped or finished the timer is disabled.
-
+//
 namespace Hanoi
 {
     public partial class HanoiForm : Form
