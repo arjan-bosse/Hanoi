@@ -12,8 +12,12 @@ using System.Windows.Forms;
 using System.Numerics;
 
 // Towers of Hanoi
-// Version: 0.1
+// Version: 0.1 (original)
 // Date   : 2019-02-10
+// Author : Arjan Bosse
+//
+// Version: 0.2 (drawing improved)
+// Date   : 2025-07-21
 // Author : Arjan Bosse
 //
 //Generate a form and show an initial Hanoi situation.
@@ -63,6 +67,7 @@ namespace Hanoi
                 int halfPegWidth = (width / pegs) * 4 / 10;
 
                 int yBase = height * 14 / 15;
+                int yTop = height - yBase;
                 int yBase1000 = 1000 * yBase;
                 int discHeight1000 = 1000 * (2 * yBase - height) / (discs + 1);
                 int discHeight = discHeight1000 / 1000;
@@ -70,6 +75,8 @@ namespace Hanoi
                 int minHalfDiscWidth = discHeight / 2;
                 if (minHalfDiscWidth < 2) minHalfDiscWidth = 2;
                 if (2 * minHalfDiscWidth > halfPegWidth) minHalfDiscWidth = halfPegWidth / 2;
+
+                g.DrawLine(pen, new Point(x - halfPegWidth, yBase), new Point(x + halfPegWidth, yBase));
 
                 foreach (Disc disc in peg.discList)
                 {
@@ -80,24 +87,9 @@ namespace Hanoi
                     yBase1000 -= discHeight1000;
                     yBase = yBase1000 / 1000;
                 }
-            }
-        }
 
-        private void DrawPegs(Graphics g)
-        {
-            int pegs = hanoiState.pegs;
-
-            foreach (Peg peg in hanoiState.pegList)
-            {
-                int x = peg.id * (width / pegs) - width / (2 * pegs);
-                int halfPegWidth = (width / pegs) * 4 / 10;
-
-                int yBase = height * 14 / 15;
-                int yTop = height - yBase;
-
-                g.DrawLine(pen, new Point(x - halfPegWidth, yBase), new Point(x + halfPegWidth, yBase));
                 g.DrawLine(pen, new Point(x, yBase), new Point(x, yTop));
-             }
+            }
         }
 
         private void Redraw()
@@ -105,7 +97,6 @@ namespace Hanoi
             Bitmap bitmap = new Bitmap(width, height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                DrawPegs(g);
                 DrawDiscs(g);
                 g.Flush();
             }
