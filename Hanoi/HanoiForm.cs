@@ -35,7 +35,9 @@ namespace Hanoi
         //display properties
         private int width = 800;
         private int height = 400;
-        private Pen pen;
+        private Pen redPen;
+        private Pen blackPen;
+        private int topK;
 
         //show analyse information
         private AnalyseForm analyse;
@@ -67,8 +69,8 @@ namespace Hanoi
                 int halfPegWidth = (width / pegs) * 4 / 10;
 
                 int yBase = height * 14 / 15;
-                int yTop = height - yBase;
                 int yBase1000 = 1000 * yBase;
+                int yTop = height - yBase;
                 int discHeight1000 = 1000 * (2 * yBase - height) / (discs + 1);
                 int discHeight = discHeight1000 / 1000;
 
@@ -76,19 +78,23 @@ namespace Hanoi
                 if (minHalfDiscWidth < 2) minHalfDiscWidth = 2;
                 if (2 * minHalfDiscWidth > halfPegWidth) minHalfDiscWidth = halfPegWidth / 2;
 
-                g.DrawLine(pen, new Point(x - halfPegWidth, yBase), new Point(x + halfPegWidth, yBase));
+                //draw peg baseline
+                g.DrawLine(blackPen, new Point(x - halfPegWidth, yBase), new Point(x + halfPegWidth, yBase));
 
+                //draw top K discs in red, bottom in black
                 foreach (Disc disc in peg.discList)
                 {
                     int halfDiscWidth = minHalfDiscWidth + (disc.id * (halfPegWidth - minHalfDiscWidth) / discs);
 
+                    Pen pen = (disc.id > topK ? blackPen : redPen); 
                     g.DrawEllipse(pen, x - halfDiscWidth, yBase - discHeight, 2 * halfDiscWidth, discHeight);
 
                     yBase1000 -= discHeight1000;
                     yBase = yBase1000 / 1000;
                 }
 
-                g.DrawLine(pen, new Point(x, yBase), new Point(x, yTop));
+                //draw top part of peg not covered by discs
+                g.DrawLine(blackPen, new Point(x, yBase), new Point(x, yTop));
             }
         }
 
@@ -121,6 +127,7 @@ namespace Hanoi
             drawing = false;
             running = false;
             stopRunning = true;
+            topK = solution.GetFrameStewart().GetK(pegs, discs);
 
             countToolStripTextBox.Text = movesDone.ToString() + " / " + solution.GetMoves();
             pegsToolStripComboBox.Text = pegs.ToString();
@@ -175,8 +182,8 @@ namespace Hanoi
                     pegsToolStripComboBox.Text = pegs.ToString();
                 }
 
-                //default 5 discs, min 1, max 1000
-                int discs = 5;
+                //default 6 discs, min 1, max 1000
+                int discs = 6;
                 if (!Int32.TryParse(discsToolStripComboBox.Text, out discs) || discs < 1 || discs > 1000)
                 {
                     discs = (discs < 1 ? 1 : discs > 1000 ? 1000 : discs);
@@ -228,10 +235,11 @@ namespace Hanoi
         {
             InitializeComponent();
             analyse = new AnalyseForm();
-            pen = new Pen(Color.Black, 1);
+            redPen = new Pen(Color.Red, 1);
+            blackPen = new Pen(Color.Black, 1);
 
-            //initial 3 pegs and 5 discs
-            Reset(3, 5);
+            //initial 3 pegs and 6 discs
+            Reset(3, 6);
         }
 
         private void Form1_Load(object sender, EventArgs e)
